@@ -1,7 +1,30 @@
 import React from 'react';
 
 function Cart({ cart, removeFromCart }) {
-  const total = cart.reduce((sum, book) => sum + book.price, 0);
+  const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  const handleCheckout = async () => {
+    if (cart.length === 0) return;
+
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: cart[0].user_id
+        })
+      });
+
+      if (response.ok) {
+        alert('Order placed successfully!');
+        removeFromCart('all'); // Clear cart
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+    }
+  };
 
   return (
     <div className="cart">
@@ -12,19 +35,19 @@ function Cart({ cart, removeFromCart }) {
       ) : (
         <>
           <div className="cart-items">
-            {cart.map((book, index) => (
-              <div key={`${book.id}-${index}`} className="cart-item">
-                <h3>{book.title}</h3>
-                <p>Автор: {book.author}</p>
-                <p>Цена: {book.price} руб.</p>
-                <button onClick={() => removeFromCart(book.id)}>Удалить</button>
+            {cart.map((item) => (
+              <div key={item.id} className="cart-item">
+                <h3>{item.title}</h3>
+                <p>Author: {item.author}</p>
+                <p>Price: {item.price} × {item.quantity} = {item.price * item.quantity}</p>
+                <button onClick={() => removeFromCart(item.id)}>Удалить</button>
               </div>
             ))}
           </div>
           
           <div className="cart-summary">
             <h3>Итого: {total} руб.</h3>
-            <button>Оформить заказ</button>
+            <button onClick={handleCheckout}>Оформить заказ</button>
           </div>
         </>
       )}

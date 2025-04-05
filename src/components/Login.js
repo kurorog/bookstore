@@ -21,36 +21,19 @@ function Login({ onLogin }) {
     e.preventDefault();
     
     if (isRegister) {
-      // Регистрация
       if (!formData.name || !formData.email || !formData.password) {
         setError('Все поля обязательны для заполнения');
         return;
       }
-      
-      onLogin({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        country: '',
-        city: '',
-        age: ''
-      });
     } else {
-      // Авторизация
       if (!formData.email || !formData.password) {
         setError('Email и пароль обязательны');
         return;
       }
-      
-      // В реальном приложении здесь была бы проверка на сервере
-      onLogin({
-        name: 'Пользователь',
-        email: formData.email,
-        country: 'Россия',
-        city: 'Москва',
-        age: '30'
-      });
     }
+    
+    onLogin(formData);
+    setError('');
   };
 
   return (
@@ -68,6 +51,7 @@ function Login({ onLogin }) {
               name="name" 
               value={formData.name} 
               onChange={handleInputChange} 
+              required 
             />
           </div>
         )}
@@ -79,6 +63,7 @@ function Login({ onLogin }) {
             name="email" 
             value={formData.email} 
             onChange={handleInputChange} 
+            required 
           />
         </div>
         
@@ -89,6 +74,8 @@ function Login({ onLogin }) {
             name="password" 
             value={formData.password} 
             onChange={handleInputChange} 
+            required 
+            minLength="6"
           />
         </div>
         
@@ -97,7 +84,7 @@ function Login({ onLogin }) {
       
       <p>
         {isRegister ? 'Уже есть аккаунт?' : 'Ещё не зарегистрированы?'}{' '}
-        <button onClick={() => setIsRegister(!isRegister)}>
+        <button type="button" onClick={() => setIsRegister(!isRegister)}>
           {isRegister ? 'Войти' : 'Зарегистрироваться'}
         </button>
       </p>
