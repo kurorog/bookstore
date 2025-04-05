@@ -440,4 +440,15 @@ body {
     
     .profile-info {
       flex-direction: column;
-     
+      align-items: center;
+      text-align: center;
+    }
+    
+    .books-list {
+      grid-template-columns: 1fr;
+    }
+    
+    .search-inputs {
+      flex-direction: column;
+    }
+  }
