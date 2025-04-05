@@ -16,7 +16,7 @@ function BookCatalog({ addToCart }) {
     minPrice: '',
     maxPrice: '',
   });
-  const [sortBy, setSortBy] = useState('');
+  const [, setSortBy] = useState('');
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
